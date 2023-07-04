@@ -276,60 +276,8 @@ Resources:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
-            Action: airflow:PublishMetrics
-            Resource:
-              - !Sub "arn:aws:airflow:${AWS::Region}:${AWS::AccountId}:environment/${AWS::StackName}-MwaaEnvironment"
-          - Effect: Deny
-            Action: s3:ListAllMyBuckets
-            Resource:
-              - !Sub "arn:aws:s3:::${S3Bucket}"
-          - Effect: Allow
-            Action:
-              - "s3:*"
-            Resource:
-              - !Sub "arn:aws:s3:::${S3Bucket}"
-              - !Sub "arn:aws:s3:::${S3Bucket}/*"
-          - Effect: Allow
-            Action:
-              - logs:DescribeLogGroups
+            Action: "*"
             Resource: "*"
-
-          - Effect: Allow
-            Action:
-              - logs:CreateLogStream
-              - logs:CreateLogGroup
-              - logs:PutLogEvents
-              - logs:GetLogEvents
-              - logs:GetLogRecord
-              - logs:GetLogGroupFields
-              - logs:GetQueryResults
-              - logs:DescribeLogGroups
-            Resource:
-              - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:airflow-${AWS::StackName}*"
-          - Effect: Allow
-            Action: cloudwatch:PutMetricData
-            Resource: "*"
-          - Effect: Allow
-            Action:
-              - sqs:ChangeMessageVisibility
-              - sqs:DeleteMessage
-              - sqs:GetQueueAttributes
-              - sqs:GetQueueUrl
-              - sqs:ReceiveMessage
-              - sqs:SendMessage
-            Resource:
-              - !Sub "arn:aws:sqs:${AWS::Region}:*:airflow-celery-*"
-          - Effect: Allow
-            Action:
-              - kms:Decrypt
-              - kms:DescribeKey
-              - "kms:GenerateDataKey*"
-              - kms:Encrypt
-            NotResource: !Sub "arn:aws:kms:*:${AWS::AccountId}:key/*"
-            Condition:
-              StringLike:
-                "kms:ViaService":
-                  - !Sub "sqs.${AWS::Region}.amazonaws.com"
 Outputs:
   VPC:
     Description: A reference to the created VPC
